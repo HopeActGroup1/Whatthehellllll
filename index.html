@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Prevent zooming -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            background-color: #f0f0f0;
+            height: 100vh;
+        }
+        h1, p, #scoreBoard {
+            margin: 2px;
+        }
+        #gameContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 10px;
+            background-color: white;
+            width: 100vw;
+            height: calc(100vh - 150px);
+            overflow: hidden;
+        }
+        #leftSide, #rightSide {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border: 1px solid black;
+            overflow: hidden;
+        }
+        img {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+        }
+    </style>
+    <script>
+        let numberOfFaces = 5;
+        let round = 1;
+        let score = 0;
+        let timer;
+        let timeLeft = 20; // 20-second timer
+
+        function getRand(min, max) {
+            return Math.floor((Math.random() * (max - min))) + min;
+        }
+
+        function updateScoreBoard() {
+            document.getElementById("scoreBoard").innerText = `Round: ${round} | Score: ${score} | Time Left: ${timeLeft}s`;
+        }
+
+        function resetGame() {
+            round = 1;
+            score = 0;
+            numberOfFaces = 5;
+            timeLeft = 20;
+            updateScoreBoard();
+            generateFaces();
+        }
+
+        function startTimer() {
+            clearInterval(timer);
+            timer = setInterval(() => {
+                timeLeft--;
+                updateScoreBoard();
+                if (timeLeft <= 0) {
+                    alert("Time's up! Restarting from Round 1.");
+                    resetGame();
+                }
+            }, 1000);
+        }
+
+        function generateFaces() {
+            const theBody = document.getElementsByTagName("body")[0];
+            const theLeftSide = document.getElementById("leftSide");
+            while (theLeftSide.firstChild) {
+                theLeftSide.removeChild(theLeftSide.firstChild);
+            }
+            const theRightSide = document.getElementById("rightSide");
+            while (theRightSide.firstChild) {
+                theRightSide.removeChild(theRightSide.firstChild);
+            }
+
+            for (let i = 0; i < numberOfFaces; i++) {
+                const theImg = document.createElement("img");
+                theImg.src = Math.random() < 0.5 ? "1.png" : "2.png";
+                theImg.style.top = getRand(0, theLeftSide.offsetHeight - 70) + 'px';
+                theImg.style.left = getRand(0, theLeftSide.offsetWidth - 70) + 'px';
+                theLeftSide.appendChild(theImg);
+            }
+
+            const leftSideImages = theLeftSide.cloneNode(true);
+            leftSideImages.removeChild(leftSideImages.lastChild);
+            theRightSide.appendChild(leftSideImages);
+
+            theBody.onclick = function gameOver() {
+                alert("Game Over!");
+                resetGame();
+            };
+
+            theLeftSide.lastChild.onclick = function nextLevel(event) {
+                event.stopPropagation();
+                score += 10;  // Increase score
+                round++; // Move to the next round
+                numberOfFaces += 5;  // Increase number of faces
+                timeLeft = 20;  // Reset timer
+                updateScoreBoard();
+                generateFaces();
+            };
+
+            startTimer();  // Start the timer for the new round
+        }
+    </script>
+</head>
+<body onload="generateFaces()">
+    <h1>Matching Game</h1>
+    <p>Click on the extra smiling face in the top box.</p>
+    <div id="scoreBoard">Round: 1 | Score: 0 | Time Left: 20s</div> <!-- Scoreboard -->
+    <div id="gameContainer">
+        <div id="leftSide"></div>
+        <div id="rightSide"></div>
+    </div>
+</body>
+</html>
