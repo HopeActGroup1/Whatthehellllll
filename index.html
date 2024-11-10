@@ -24,7 +24,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 30px;
             padding: 10px;
             background-color: white;
             width: 100vw;
@@ -49,7 +49,7 @@
         let round = 1;
         let score = 0;
         let timer;
-        let timeLeft = 20; // 20-second timer
+        let timeLeft = 30; // 30-second timer
 
         function getRand(min, max) {
             return Math.floor((Math.random() * (max - min))) + min;
@@ -63,7 +63,7 @@
             round = 1;
             score = 0;
             numberOfFaces = 5;
-            timeLeft = 20;
+            timeLeft = 30;
             updateScoreBoard();
             generateFaces();
         }
@@ -113,7 +113,7 @@
                 score += 10;  // Increase score
                 round++; // Move to the next round
                 numberOfFaces += 5;  // Increase number of faces
-                timeLeft = 20;  // Reset timer
+                timeLeft = 30;  // Reset timer
                 updateScoreBoard();
                 generateFaces();
             };
@@ -123,9 +123,16 @@
     </script>
 </head>
 <body onload="generateFaces()">
+    <!-- Add the audio player for background music -->
+    <audio autoplay loop>
+        <source src="ksi.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
     <h1>Matching Game</h1>
     <p>Click on the extra smiling face in the top box.</p>
-    <div id="scoreBoard">Round: 1 | Score: 0 | Time Left: 20s</div> <!-- Scoreboard -->
+    <div id="scoreBoard">Round: 1 | Score: 0 | Time Left: 30s</div>
+
     <div id="gameContainer">
         <div id="leftSide"></div>
         <div id="rightSide"></div>
